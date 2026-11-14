@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ru"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Обратная связь</title>
+<style>body{font:18px system-ui;max-width:680px;margin:40px auto;padding:20px;background:#f4f6fa}input,select,button,textarea{font:inherit;padding:10px;margin:6px}button{cursor:pointer}output,[role=alert],[role=status]{display:block;padding:12px}li{padding:8px;background:white;margin:5px}</style>
+<h1>Обратная связь</h1>
+<form id="contact" novalidate>
+<label>Имя <input id="name" name="name"></label><br>
+<label>Email <input id="email" name="email"></label><br>
+<label>Сообщение <textarea id="message" name="message"></textarea></label><br>
+<button id="send">Отправить</button></form>
+<p id="error" role="alert"></p><p id="success" role="status"></p>
+<script>
+const form=document.querySelector('#contact');
+form.onsubmit=e=>{
+ e.preventDefault();
+ const name=form.elements.name.value.trim();
+ const email=form.elements.email.value.trim();
+ const message=form.elements.message.value.trim();
+ const errors=[];
+ if(!name)errors.push('Введите имя');
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))errors.push('Введите корректный email');
+ if(!message)errors.push('Введите сообщение');
+ document.querySelector('#error').textContent=errors.join('; ');
+ document.querySelector('#success').textContent=errors.length?'':'Сообщение отправлено';
+};
+</script></html>

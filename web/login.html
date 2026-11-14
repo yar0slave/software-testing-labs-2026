@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ru"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Вход в учебный стенд</title>
+<style>body{font:18px system-ui;max-width:680px;margin:40px auto;padding:20px;background:#f4f6fa}input,select,button,textarea{font:inherit;padding:10px;margin:6px}button{cursor:pointer}output,[role=alert],[role=status]{display:block;padding:12px}li{padding:8px;background:white;margin:5px}</style>
+<h1>Вход в учебный стенд</h1>
+<form id="login" novalidate>
+<label>Логин <input id="username" name="username" autocomplete="username"></label><br>
+<label>Пароль <input id="password" name="password" type="password" autocomplete="current-password"></label><br>
+<button id="submit">Войти</button></form>
+<p id="error" role="alert"></p><section id="account" hidden>
+<p id="welcome">Вход выполнен</p><button id="logout">Logout</button></section>
+<script>
+// Только демонстрационный стенд. Это не механизм защиты реального сервиса.
+const form=document.querySelector('#login'), account=document.querySelector('#account');
+form.onsubmit=e=>{
+ e.preventDefault();
+ const ok=form.username.value==='student'&&form.password.value==='Test123!';
+ document.querySelector('#error').textContent=ok?'':'Неверный логин или пароль';
+ if(ok){form.hidden=true;account.hidden=false;form.password.value='';}
+};
+document.querySelector('#logout').onclick=()=>{account.hidden=true;form.hidden=false;};
+</script></html>

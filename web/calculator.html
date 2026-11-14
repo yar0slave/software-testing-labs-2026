@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ru"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Калькулятор</title>
+<style>body{font:18px system-ui;max-width:680px;margin:40px auto;padding:20px;background:#f4f6fa}input,select,button,textarea{font:inherit;padding:10px;margin:6px}button{cursor:pointer}output,[role=alert],[role=status]{display:block;padding:12px}li{padding:8px;background:white;margin:5px}</style>
+<h1>Калькулятор</h1>
+<label>Первое число <input id="a" inputmode="decimal"></label><br>
+<label>Операция <select id="op"><option>+</option><option>-</option><option>*</option><option>/</option></select></label><br>
+<label>Второе число <input id="b" inputmode="decimal"></label><br>
+<button id="calculate">Вычислить</button><button id="clear">Очистить</button>
+<output id="result" aria-live="polite"></output>
+<script>
+const a=document.querySelector('#a'), b=document.querySelector('#b');
+const op=document.querySelector('#op'), out=document.querySelector('#result');
+document.querySelector('#calculate').onclick=()=>{
+ const valid=s=>/^[+-]?(\d+(\.\d*)?|\.\d+)$/.test(s.trim());
+ if(!valid(a.value)||!valid(b.value)) {out.textContent='Ошибка: введите два числа';return;}
+ const x=Number(a.value), y=Number(b.value);
+ if(!Number.isFinite(x)||!Number.isFinite(y)) {out.textContent='Ошибка: число вне диапазона';return;}
+ if(op.value==='/'&&y===0) {out.textContent='Ошибка: деление на ноль';return;}
+ const z=op.value==='+'?x+y:op.value==='-'?x-y:op.value==='*'?x*y:x/y;
+ out.textContent=Number.isFinite(z)?String(Number(z.toPrecision(12))):'Ошибка: результат вне диапазона';
+};
+document.querySelector('#clear').onclick=()=>{a.value='';b.value='';op.value='+';out.textContent='';a.focus();};
+</script></html>

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Список задач</title>
+<style>body{font:18px system-ui;max-width:680px;margin:40px auto;padding:20px;background:#f4f6fa}input,select,button,textarea{font:inherit;padding:10px;margin:6px}button{cursor:pointer}output,[role=alert],[role=status]{display:block;padding:12px}li{padding:8px;background:white;margin:5px}</style>
+<h1>Список задач</h1>
+<label>Задача <input id="task" maxlength="100"></label>
+<button id="add">Добавить</button><button id="clear">Очистить список</button>
+<ul id="tasks"></ul><output id="count"></output>
+<script>
+// Учебная версия содержит три намеренных дефекта.
+const fixed=new URLSearchParams(location.search).get('fixed')==='1';
+let tasks=fixed?JSON.parse(localStorage.getItem('lab-tasks')||'[]'):[];
+const input=document.querySelector('#task'), list=document.querySelector('#tasks');
+function render(){
+ list.replaceChildren();
+ tasks.forEach((task,i)=>{
+  const li=document.createElement('li');
+  const check=document.createElement('input');check.type='checkbox';check.checked=task.done;
+  check.onchange=()=>{task.done=check.checked;render();};
+  const text=document.createElement('span');text.textContent=task.text;
+  text.style.textDecoration=task.done?'line-through':'none';
+  const del=document.createElement('button');del.textContent='Удалить';
+  del.onclick=()=>{tasks.splice(fixed?i:0,1);render();};
+  li.append(check,text,del);list.append(li);
+ });
+ document.querySelector('#count').textContent='Всего: '+tasks.length;
+ if(fixed)localStorage.setItem('lab-tasks',JSON.stringify(tasks));
+}
+document.querySelector('#add').onclick=()=>{
+ const value=fixed?input.value.trim():input.value;
+ if(fixed&&!value)return;
+ tasks.push({text:value,done:false});input.value='';render();
+};
+document.querySelector('#clear').onclick=()=>{tasks=[];render();};
+render();
+</script></html>
