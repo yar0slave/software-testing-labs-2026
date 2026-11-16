@@ -22,9 +22,11 @@ def mobile():
         'appium:newCommandTimeout': 120,
     })
     driver = webdriver.Remote(os.getenv('APPIUM_URL','http://127.0.0.1:4723'), options=options)
-    WebDriverWait(driver, 30).until(EC.presence_of_element_located((AppiumBy.ACCESSIBILITY_ID,'note-input')))
-    yield driver
-    driver.quit()
+    try:
+        WebDriverWait(driver, 30).until(EC.presence_of_element_located((AppiumBy.ACCESSIBILITY_ID,'note-input')))
+        yield driver
+    finally:
+        driver.quit()
 
 def find(driver, name):
     return driver.find_element(AppiumBy.ACCESSIBILITY_ID,name)
@@ -32,7 +34,6 @@ def find(driver, name):
 def add(driver,text):
     find(driver,'note-input').send_keys(text)
     find(driver,'add-note').click()
-    if driver.is_keyboard_shown(): driver.hide_keyboard()
 
 def test_add_note(mobile):
     add(mobile,'Appium test')
@@ -47,7 +48,6 @@ def test_empty_note(mobile):
 def test_rotation_preserves_note_and_draft(mobile):
     add(mobile,'Saved note')
     find(mobile,'note-input').send_keys('Draft')
-    if mobile.is_keyboard_shown(): mobile.hide_keyboard()
     mobile.orientation='LANDSCAPE'
     assert find(mobile,'note-0').text == 'Saved note'
     assert find(mobile,'note-input').text == 'Draft'
