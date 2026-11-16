@@ -59,7 +59,10 @@ def test_restart_preserves_saved_note(mobile):
     add(mobile,'Persistent')
     mobile.terminate_app(PKG)
     mobile.activate_app(PKG)
-    assert find(mobile,'note-0').text == 'Persistent'
+    note = WebDriverWait(mobile, 15).until(
+        EC.visibility_of_element_located((AppiumBy.ACCESSIBILITY_ID, 'note-0'))
+    )
+    assert note.text == 'Persistent'
 
 def test_swipe_delete(mobile):
     add(mobile,'Delete me')
